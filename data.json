@@ -1,0 +1,212 @@
+{
+	"info": {
+		"_postman_id": "a5068b50-9e0e-4bb0-877d-7f163dd075c9",
+		"name": "csv",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "csv新增主题",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "30fd5493-8eb0-44c8-a91e-942122e689c2",
+						"exec": [
+							"",
+							"",
+							"",
+							"var status=pm.variables.get(\"status\");",
+							"if(status=='success'){",
+							"    pm.test(\"状态码为200\", function () {",
+							"    pm.response.to.have.status(200);//判断状态码",
+							"});",
+							"    pm.test(\"包含以下字符串\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"success\":true,');",
+							"});",
+							"",
+							"    pm.test(\"新增主题结果返回true\", function () {",
+							"    var jsonData = pm.response.json();//把整个服务器响应结果转为json",
+							"    //  console.log(\"jsonDtat的值为\",jsonData['success']);//加大括号可指定字段返回",
+							"  ",
+							"    //设置全局变量，让下一个接口可以使用这个变量",
+							"    pm.globals.set(\"topic_id\",jsonData['topic_id']);",
+							"",
+							"    pm.expect(jsonData['success']).to.eql(true);//添加一个断言",
+							"});",
+							"",
+							"",
+							"}else{",
+							"    pm.test(\"状态码为400\", function () {",
+							"    ",
+							"var exp_status=pm.variables.get(\"expect_status_code\");",
+							"    pm.response.to.have.status(exp_status);//判断状态码",
+							"    ",
+							"});",
+							"",
+							"",
+							"}",
+							"pm.test(\"响应时间小于 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "6c1459d3-baf2-4cc6-a714-01af8f51eaee",
+						"exec": [
+							"//pm.environment.set(\"abc\", \"123456\");//设置变量",
+							"",
+							"//设置以下变量 可填入请求体",
+							"// pm.environment.set(\"title\", \"吃西瓜种西瓜炸西瓜\");//设置变量",
+							"// pm.environment.set(\"tab\", \"ask\");//设置变量",
+							"// pm.environment.set(\"content\", \"12345678\");//设置变量",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "accesstoken",
+							"value": "3333a0fb-6dd8-439e-813b-2c3a5213a154",
+							"type": "text"
+						},
+						{
+							"key": "title",
+							"value": "{{title}}",
+							"type": "text"
+						},
+						{
+							"key": "tab",
+							"value": "{{tab}}",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "{{content}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server_url}}/topics",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"topics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "csv主题详情",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7c933941-7b45-4c79-bb8e-dbbfb0a0775c",
+						"exec": [
+							"",
+							"",
+							"var status=pm.variables.get(\"status\");",
+							"if(status=='success'){",
+							"    var jsonData = pm.response.json(); //全局",
+							"//打印 查看jsondata输出内容",
+							"console.log(\"主题详情\",jsonData)",
+							"//服务器返回的实际结果",
+							"var title=jsonData['data']['title']",
+							"var tab=jsonData['data']['tab']",
+							"var content=jsonData['data']['content']",
+							"",
+							"",
+							"//期望值",
+							"var exp_title=String(pm.variables.get(\"title\"));",
+							"var exp_tab=String(pm.variables.get(\"tab\"));",
+							"var exp_content=String(pm.variables.get(\"content\"));",
+							"",
+							"console.log(\"期望\",exp_title,exp_tab,exp_content);",
+							"",
+							"pm.test(\"检查title\", function () {",
+							"    //期望值",
+							"    pm.expect(title).to.eql(exp_title);",
+							"});",
+							"pm.test(\"检查tab\", function () {",
+							"    //期望值",
+							"    pm.expect(tab).to.eql(exp_tab);",
+							"});",
+							"/*pm.test(\"检查tcontent\", function () {",
+							"    //期望值",
+							"    pm.expect(content).to.eql(exp_content);",
+							"});*/",
+							"",
+							"}",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "96225154-c990-48f9-ab06-8bac709eedef",
+						"exec": [
+							"var status=pm.variables.get(\"status\");",
+							"if(status=='fail'){",
+							"    ",
+							"pm.environment.set(\"topic_id\",\"5d240ebf502f702c9b7acbe1\");",
+							"",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{server_url}}/topic/{{topic_id}}",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"topic",
+						"{{topic_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
